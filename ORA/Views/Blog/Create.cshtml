@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "New Blog";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<link href="~/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="~/js/froala_editor.pkgd.min.js"></script>
+<link href="~/css/plugins/image.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="~/js/plugins/image.min.js"></script>
+
+
+
+<div id="main-content" class="blog-page">
+    <div class="container">
+        <form action="newPost" method="POST">
+            <span>Tiêu đề</span>
+            <input name="title" placeholder="Tiêu đề" type="text" class="form-control" />
+            <br />
+            <textarea name="content" id="myEditor"></textarea>
+            <button class="btn btn-secondary">Submit</button>
+        </form>
+
+        <script>
+            var editor = new FroalaEditor("#myEditor");
+        </script>
+    </div>
+</div>

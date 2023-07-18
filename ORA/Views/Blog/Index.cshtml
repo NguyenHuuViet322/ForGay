@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Blog>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="main-content" class="blog-page">
+    <div class="container">
+        @foreach(var blog in Model)
+        {
+            <div class="row clearfix">
+                <div class="col-lg-8 col-md-12 left-box">
+                    <div class="card single_post">
+                        <div class="body">
+                            <h3><a href="Blog/Detail?id=@blog.id">@blog.title</a></h3>
+                            @Html.Raw(blog.content)
+                            <p class="author">
+                                <span>@blog.userMail</span>
+                            </p>
+                            <a href="Blog/Detail?id=@blog.id" class="btn btn-primary">Đọc thêm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

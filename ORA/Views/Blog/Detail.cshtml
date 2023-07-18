@@ -1,0 +1,70 @@
+﻿@using ORA.Data;
+@model Blog
+@inject IHttpContextAccessor _accessor
+@inject BlogContext _context
+@{
+    ViewData["Title"] = "Home Page";
+    var cmtList = _context.comments.Where(p => p.postId == Model.id).OrderBy(p => p.dateCreated).ToList();
+}
+
+<div id="main-content" class="blog-page">
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12 left-box">
+                <div class="card single_post">
+                    <div class="body">
+                        <h3><a href="blog-details.html">@Model.title</a></h3>
+                        @Html.Raw(Model.content)
+                        <p class="author">
+                            <span>Tác giả: @Model.userMail</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="header">
+                        <h2>Comments </h2>
+                    </div>
+                    <div class="body">
+                        <ul class="comment-reply list-unstyled">
+                            @{
+                                if(_accessor.HttpContext.User.Identity.Name != null)
+                                {
+                                    <li class="row clearfix">
+                                        <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIOaXs2czh7MX8R9amcb-x0T6WpL-6JBaFHpVoqlmmzs07LsperR3DlwsojVAsCpc53A4&usqp=CAU" alt="Awesome Image"></div>
+                                        <div class="text-box col-md-10 col-8 p-l-0 p-r0">
+                                            <h5 class="m-b-0">Nhập bình luận </h5>
+                                            <form action="newCmt" method="POST">
+                                                <input type="hidden" name="name" value="@_accessor.HttpContext.User.Identity.Name" />
+                                                <input type="hidden" name="postId" value="@Model.id" />
+                                                <textarea placeholder="Nhập bình luận" name="cmt" class="form-control"></textarea>
+                                                <ul class="list-inline">
+                                                    <li><a><button class="btn btn-info" style="margin-top:0.4em;float:right;" type="submit">Gửi bình luận</button></a></li>
+                                                </ul>
+                                            </form>
+                                        </div>
+                                    </li>
+                                }
+                                foreach(var cmt in cmtList)
+                                {
+                                    <li class="row clearfix">
+                                        <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIOaXs2czh7MX8R9amcb-x0T6WpL-6JBaFHpVoqlmmzs07LsperR3DlwsojVAsCpc53A4&usqp=CAU" alt="Awesome Image"></div>
+                                        <div class="text-box col-md-10 col-8 p-l-0 p-r0">
+                                            <h5 class="m-b-0">@cmt.userMail</h5>
+                                            <p>@cmt.content</p>
+                                            <ul class="list-inline">
+                                                <li><a href="javascript:void(0);">@cmt.dateCreated.ToString()</a></li>
+                                                @if(_accessor.HttpContext.User.Identity.Name == Model.userMail) {
+                                                    <li><a href="/Blog/Remove?cmtId=@cmt.id&postId=@Model.id">Xóa bình luận</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
